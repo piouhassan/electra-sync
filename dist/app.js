@@ -183,10 +183,12 @@ const startServer = async () => {
         await initializeDB();
 
         const PORT = process.env.PORT || 5000;
-        app.listen(PORT, () => {
-            console.log(`🚀 Serveur démarré sur le port ${PORT}`);
+        const HOST = process.env.RENDER ? '0.0.0.0' : 'localhost';
+
+        app.listen(PORT, HOST, () => {
+            console.log(`🚀 Serveur démarré sur ${HOST}:${PORT}`);
             console.log(`📊 Environnement: ${process.env.NODE_ENV || 'development'}`);
-            console.log(`🌐 API disponible sur: http://localhost:${PORT}`);
+            console.log(`🌐 API disponible sur: http://${HOST}:${PORT}`);
             console.log(`🔌 MongoDB: ${dbInitialized ? 'connecté' : 'déconnecté'}`);
         });
     }
@@ -196,9 +198,9 @@ const startServer = async () => {
     }
 };
 
-// En local : on lance app.listen
+// En local et Render : on lance app.listen
 // Sur Vercel : on exporte seulement app
-if (require.main === module) {
+if (require.main === module || process.env.RENDER) {
     startServer();
 }
 
