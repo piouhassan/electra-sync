@@ -12,7 +12,7 @@ const connectDB = async () => {
     }
     console.log('Tentative de connexion à MongoDB...');
     try {
-        const mongoURI = "mongodb+srv://godwinkodjo18_db_user:godwin1234@cluster0.eb7vkwv.mongodb.net/test?retryWrites=true&w=majority&appName=Cluster0";
+        const mongoURI = "mongodb+srv://piouhassan:1012moiHassan@cluster0.ksf1nrb.mongodb.net/colelectra?retryWrites=true&w=majority";
         console.log('URI MongoDB:', mongoURI.replace(/:[^@]*@/, ':***@'));
 
         await mongoose_1.default.connect(mongoURI, {
