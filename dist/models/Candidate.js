@@ -40,15 +40,12 @@ const candidateSchema = new mongoose_1.Schema({
         required: [true, 'Le nom du candidat est requis'],
         trim: true
     },
-    electionId: {
+    party: {
         type: mongoose_1.Schema.Types.ObjectId,
-        ref: 'Election',
-        required: [true, 'L\'ID de l\'élection est requis']
+        ref: '',
+        required: [true, 'la partie est requis']
     },
-    pollingStationId: {
-        type: mongoose_1.Schema.Types.ObjectId,
-        ref: 'PollingStation'
-    },
+
     createdAt: {
         type: Date,
         default: Date.now

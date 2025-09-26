@@ -10,9 +10,7 @@ const router = (0, express_1.Router)();
 // GET /candidates - Récupérer tous les candidats
 router.get('/', async (req, res) => {
     try {
-        const candidates = await Candidate_1.default.find()
-            .populate('election', 'title description')
-            .populate('polling_station', 'name location');
+        const candidates = await Candidate_1.default.find();
         res.json({
             success: true,
             data: candidates
@@ -29,9 +27,7 @@ router.get('/', async (req, res) => {
 // GET /candidates/:id - Récupérer un candidat par ID
 router.get('/:id', async (req, res) => {
     try {
-        const candidate = await Candidate_1.default.findById(req.params.id)
-            .populate('election', 'title description')
-            .populate('polling_station', 'name location');
+        const candidate = await Candidate_1.default.findById(req.params.id);
         if (!candidate) {
             return res.status(404).json({
                 success: false,
@@ -54,8 +50,6 @@ router.get('/:id', async (req, res) => {
 router.get('/election/:electionId', async (req, res) => {
     try {
         const candidates = await Candidate_1.default.find({ election: req.params.electionId })
-            .populate('election', 'title description')
-            .populate('polling_station', 'name location');
         res.json({
             success: true,
             data: candidates
@@ -71,17 +65,13 @@ router.get('/election/:electionId', async (req, res) => {
 // POST /candidates - Créer un nouveau candidat
 router.post('/', auth_1.requireAuth, async (req, res) => {
     try {
-        const { name, election_id, polling_station_id } = req.body;
+        const { name, party } = req.body;
         const candidate = new Candidate_1.default({
             name,
-            election: election_id,
-            polling_station: polling_station_id || null
+            party: party,
         });
         await candidate.save();
-        await candidate.populate('election', 'title description');
-        if (polling_station_id) {
-            await candidate.populate('polling_station', 'name location');
-        }
+
         res.status(201).json({
             success: true,
             data: candidate,
@@ -98,14 +88,12 @@ router.post('/', auth_1.requireAuth, async (req, res) => {
 // PUT /candidates/:id - Mettre à jour un candidat
 router.put('/:id', auth_1.requireAuth, async (req, res) => {
     try {
-        const { name, election_id, polling_station_id } = req.body;
+        const { name, election_id, party } = req.body;
         const candidate = await Candidate_1.default.findByIdAndUpdate(req.params.id, {
             name,
             election: election_id,
-            polling_station: polling_station_id || null
+            party: party || null
         }, { new: true, runValidators: true })
-            .populate('election', 'title description')
-            .populate('polling_station', 'name location');
         if (!candidate) {
             return res.status(404).json({
                 success: false,
